@@ -31,7 +31,6 @@ typedef enum {
     NSError *error = nil;
     
     self.content = [NSMutableArray arrayWithArray:[[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.path error:&error]];
-    self.content = [self arrayByRemovingHiddenFilesAndFolders:self.content];
     
     error ? NSLog(@"%@", [error localizedDescription]) : 0;
     
@@ -176,7 +175,7 @@ typedef enum {
     [super viewDidLoad];
     
     if (!self.path) {
-        self.path = @"/Users/dmitrymarchenko/Desktop/test";
+        self.path = @"/Users/dmmarychev/Desktop/test for lesson 34";
     }
 }
 
@@ -295,11 +294,12 @@ typedef enum {
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.content indexOfObject:name] inSection:0];
     
+    
     [self.tableView performBatchUpdates:^{
         
-//        if ([self.tableView numberOfRowsInSection:0] >= indexPath.row && [self.tableView numberOfRowsInSection:0] != 0) {
-//            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-//        }
+        if ([self.tableView numberOfRowsInSection:0] > indexPath.row && [self.tableView numberOfRowsInSection:0] != 0) {
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+        }
         
         [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
@@ -335,23 +335,6 @@ typedef enum {
     NSString *displayFileSize = [NSByteCountFormatter stringFromByteCount:folderSize countStyle:NSByteCountFormatterCountStyleFile];
     
     return displayFileSize;
-}
-
-
-#pragma mark - Other
-
-- (NSMutableArray *)arrayByRemovingHiddenFilesAndFolders:(NSArray *)array {
-    
-    NSMutableArray *newContent = [NSMutableArray arrayWithArray:array];
-    
-    for (NSString *currentContentItem in array) {
-        
-        if ([[currentContentItem substringToIndex:1] isEqualToString:@"."]) {
-            [newContent removeObject:currentContentItem];
-        }
-    }
-    
-    return newContent;
 }
 
 @end
